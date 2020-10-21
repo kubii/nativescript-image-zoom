@@ -6,11 +6,7 @@ import {
     srcProperty,
     stretchProperty
 } from './image-zoom.common';
-import * as fs from 'tns-core-modules/file-system';
-import * as utils from 'tns-core-modules/utils/utils';
-import * as types from 'tns-core-modules/utils/types';
-import * as imageSource from 'tns-core-modules/image-source';
-import { layout } from 'tns-core-modules/ui/core/view';
+import { Utils, path, knownFolders, ImageSource } from '@nativescript/core';
 
 declare const com, jp;
 
@@ -28,7 +24,7 @@ export class ImageZoom extends ImageZoomBase {
     }
 
     [minZoomScaleProperty.setNative](scale: number) {
-        if (this.nativeView && types.isNumber(scale)) {
+        if (this.nativeView && Utils.isNumber(scale)) {
             this.nativeView.setMinimumScale(scale);
             this.nativeView.setScaleLevels(
                 Number(scale),
@@ -39,7 +35,7 @@ export class ImageZoom extends ImageZoomBase {
     }
 
     [maxZoomScaleProperty.setNative](scale: number) {
-        if (this.nativeView && types.isNumber(scale)) {
+        if (this.nativeView && Utils.isNumber(scale)) {
             this.nativeView.setScaleLevels(
                 Number(this.minZoom),
                 Number(0.5833333333333334 * scale),
@@ -79,7 +75,7 @@ export class ImageZoom extends ImageZoomBase {
 
     private getResourceId(res: string = '') {
         if (res.startsWith('res://')) {
-            return utils.ad.resources.getDrawableId(res.replace('res://', ''));
+            return Utils.ad.resources.getDrawableId(res.replace('res://', ''));
         }
         return 0;
     }
@@ -171,25 +167,25 @@ export class ImageZoom extends ImageZoomBase {
 
     private getImage(src: any): any {
         let nativeImage;
-        if (types.isNullOrUndefined(src)) {
+        if (Utils.isNullOrUndefined(src)) {
             return src;
         }
         if (typeof src === 'string' && src.substr(0, 1) === '/') {
             nativeImage = new java.io.File(src);
         } else if (typeof src === 'string' && src.startsWith('~/')) {
             nativeImage = new java.io.File(
-                fs.path.join(fs.knownFolders.currentApp().path, src.replace('~/', ''))
+                path.join(knownFolders.currentApp().path, src.replace('~/', ''))
             );
         } else if (typeof src === 'string' && src.startsWith('http')) {
             nativeImage = src;
         } else if (typeof src === 'string' && src.startsWith('res://')) {
-            nativeImage = utils.ad.resources.getDrawableId(src.replace('res://', ''));
+            nativeImage = Utils.ad.resources.getDrawableId(src.replace('res://', ''));
         } else if (typeof src === 'object') {
-            const tempFile = fs.path.join(
-                fs.knownFolders.currentApp().path,
+            const tempFile = path.join(
+                knownFolders.currentApp().path,
                 `${Date.now()} + .png`
             );
-            const saved = (<imageSource.ImageSource>src).saveToFile(tempFile, 'png');
+            const saved = (<ImageSource>src).saveToFile(tempFile, 'png');
             if (saved) {
                 nativeImage = new java.io.File(tempFile);
             }
@@ -220,29 +216,29 @@ export class ImageZoom extends ImageZoomBase {
         this.builder = this.builder
             .transform(
                 new RoundedCornersTransformation(
-                    layout.toDevicePixels(<any>this.style.borderTopLeftRadius),
-                    layout.toDevicePixels(<any>this.style.borderTopWidth),
+                    Utils.layout.toDevicePixels(<any>this.style.borderTopLeftRadius),
+                    Utils.layout.toDevicePixels(<any>this.style.borderTopWidth),
                     RoundedCornersTransformation.CornerType.TOP_LEFT
                 )
             )
             .transform(
                 new RoundedCornersTransformation(
-                    layout.toDevicePixels(<any>this.style.borderTopRightRadius),
-                    layout.toDevicePixels(<any>this.style.borderTopWidth),
+                    Utils.layout.toDevicePixels(<any>this.style.borderTopRightRadius),
+                    Utils.layout.toDevicePixels(<any>this.style.borderTopWidth),
                     RoundedCornersTransformation.CornerType.TOP_RIGHT
                 )
             )
             .transform(
                 new RoundedCornersTransformation(
-                    layout.toDevicePixels(<any>this.style.borderBottomLeftRadius),
-                    layout.toDevicePixels(<any>this.style.borderBottomWidth),
+                    Utils.layout.toDevicePixels(<any>this.style.borderBottomLeftRadius),
+                    Utils.layout.toDevicePixels(<any>this.style.borderBottomWidth),
                     RoundedCornersTransformation.CornerType.BOTTOM_LEFT
                 )
             )
             .transform(
                 new RoundedCornersTransformation(
-                    layout.toDevicePixels(<any>this.style.borderBottomRightRadius),
-                    layout.toDevicePixels(<any>this.style.borderBottomWidth),
+                    Utils.layout.toDevicePixels(<any>this.style.borderBottomRightRadius),
+                    Utils.layout.toDevicePixels(<any>this.style.borderBottomWidth),
                     RoundedCornersTransformation.CornerType.BOTTOM_RIGHT
                 )
             );
