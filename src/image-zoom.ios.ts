@@ -115,6 +115,7 @@ export class ImageZoom extends ImageZoomBase {
     }
 }
 
+@NativeClass()
 export class UIScrollViewDelegateImpl extends NSObject
     implements UIScrollViewDelegate {
     private owner: WeakRef<ImageZoom>;
