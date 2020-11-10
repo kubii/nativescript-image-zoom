@@ -23,6 +23,8 @@ export class ImageZoom extends ImageZoomBase {
         this._image.contentMode = UIViewContentMode.ScaleAspectFit;
         const nativeView = UIScrollView.new();
         nativeView.addSubview(this._image);
+        nativeView.showsHorizontalScrollIndicator = false;
+        nativeView.showsVerticalScrollIndicator = false;
         return nativeView;
     }
 
