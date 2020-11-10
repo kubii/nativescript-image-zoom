@@ -72,7 +72,9 @@ export class ImageZoom extends ImageZoomBase {
 
     private calcInitScale() {
         const image = this._image.image;
-        return image.size.width > image.size.height
+        const wRatio = image.size.width / this.scrollView.bounds.size.width;
+        const hRatio = image.size.height / this.scrollView.bounds.size.height;
+        return wRatio > hRatio
             ? this.scrollView.bounds.size.width / image.size.width
             : this.scrollView.bounds.size.height / image.size.height;
     }
